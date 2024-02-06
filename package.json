@@ -1,8 +1,19 @@
 {
   "name": "project-stockmarket-vite",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "author": {
+    "name": "Ioannis Antoniou",
+    "email": "ioannis@iantoniou.gr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aimon7/project-stockmarket-vite.git"
+  },
+  "engines": {
+    "node": "20.11.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -14,6 +25,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@types/node": "^20.11.16",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
