@@ -3,6 +3,7 @@ import { FC, PropsWithChildren, createContext, useContext, useState } from "reac
 
 import mockListings from "@/mock-responses/listing-status.json";
 import { Listing } from "@/types/listing";
+import { Overview } from "@/types/overview";
 import { useQuery } from "@tanstack/react-query";
 
 interface IAPIContext {
@@ -18,6 +19,11 @@ interface IAPIContext {
 
     selectedListing: Listing | null;
     setSelectedListing: (value: Listing | null) => void;
+
+    overview: Overview | undefined;
+    isOverviewPending: boolean;
+    isOverviewError: boolean;
+    overviewError: Error | null;
 }
 
 export const APIContext = createContext<IAPIContext>({} as IAPIContext);
@@ -64,11 +70,17 @@ export const APIProvider: FC<IAPIProviderProps> = ({ children }) => {
     });
 
 
-    // todo: might use this later
-    // const { data } = useQuery({
-    //     queryKey: ['SYMBOL_SEARCH', { keywords: value }],
-    //     enabled: inputValue !== ''
-    // });
+    const { data: overviewData, isPending: isOverviewPending, isError: isOverviewError, error: overviewError } = useQuery({
+        queryKey: ['OVERVIEW', { symbol: selectedListing?.symbol }],
+        enabled: selectedListing !== null,
+        queryFn: async () => {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}OVERVIEW&symbol=${selectedListing?.symbol}&apikey=${import.meta.env.VITE_ALPHA_VANTAGE_API_KEY}`, {
+                method: "GET",
+            });
+
+            return response.json() as Promise<Overview>;
+        }
+    });
 
     return (
         <APIContext.Provider value={{
@@ -81,7 +93,11 @@ export const APIProvider: FC<IAPIProviderProps> = ({ children }) => {
             isListingsError,
             listingsError,
             selectedListing,
-            setSelectedListing
+            setSelectedListing,
+            overview: overviewData,
+            isOverviewPending,
+            isOverviewError,
+            overviewError
         }}>
             {children}
         </APIContext.Provider>

@@ -77,7 +77,18 @@ const ListboxComponent = forwardRef<
 const AutocompleteStockMarket: FC = () => {
     const { t } = useTranslation();
 
-    const { autocompleteOpen, setAutocompleteOpen, selectedListing, setSelectedListing, searchQuery, setSearchQuery, listings, isListingsPending, isListingsError, listingsError } = useAPIContext();
+    const {
+        autocompleteOpen,
+        setAutocompleteOpen,
+        selectedListing,
+        setSelectedListing,
+        searchQuery,
+        setSearchQuery,
+        listings,
+        isListingsPending,
+        isListingsError,
+        listingsError
+    } = useAPIContext();
 
     if (isListingsPending) return <Skeleton variant="rounded" width="100%" height={54} />;
 
