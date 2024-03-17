@@ -14,4 +14,8 @@ export const TRANSLATIONS_EN = {
       button: 'Login'
     }
   },
+  stock_card: {
+    header: 'Selected stock',
+    subtitle: ' View the data for your favorite stock.'
+  }
 };

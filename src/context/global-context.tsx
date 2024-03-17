@@ -1,11 +1,13 @@
-import { FC, PropsWithChildren, createContext, useContext, useState } from "react";
 import { ParseResult, parse } from "papaparse";
+import { FC, PropsWithChildren, createContext, useContext, useState } from "react";
 
-import { Listing } from "@/types/listing";
 import mockListings from "@/mock-responses/listing-status.json";
+import { Listing } from "@/types/listing";
 import { useQuery } from "@tanstack/react-query";
 
 interface IGlobalContext {
+    autocompleteOpen: boolean;
+    setAutocompleteOpen: (value: boolean) => void;
     searchQuery: string;
     setSearchQuery: (value: string) => void;
 
@@ -13,6 +15,9 @@ interface IGlobalContext {
     isListingsPending: boolean;
     isListingsError: boolean;
     listingsError: Error | null;
+
+    selectedListing: Listing | null;
+    setSelectedListing: (value: Listing | null) => void;
 }
 
 export const GlobalContext = createContext<IGlobalContext>({} as IGlobalContext);
@@ -20,7 +25,9 @@ export const GlobalContext = createContext<IGlobalContext>({} as IGlobalContext)
 interface IGlobalProviderProps extends PropsWithChildren { }
 
 export const GlobalProvider: FC<IGlobalProviderProps> = ({ children }) => {
+    const [autocompleteOpen, setAutocompleteOpen] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
 
     const { data: listingsData, isPending: isListingsPending, isError: isListingsError, error: listingsError } = useQuery({
         queryKey: ['LISTING_STATUS'],
@@ -65,12 +72,16 @@ export const GlobalProvider: FC<IGlobalProviderProps> = ({ children }) => {
 
     return (
         <GlobalContext.Provider value={{
+            autocompleteOpen,
+            setAutocompleteOpen,
             searchQuery,
             setSearchQuery,
             listings: listingsData || [] as Listing[],
             isListingsPending,
             isListingsError,
-            listingsError
+            listingsError,
+            selectedListing,
+            setSelectedListing
         }}>
             {children}
         </GlobalContext.Provider>

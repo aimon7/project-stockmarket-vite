@@ -1,13 +1,13 @@
-import { Autocomplete, Box, ListItem, ListItemButton, Skeleton, TextField, Typography } from "@mui/material";
-import { FC, SyntheticEvent, forwardRef } from "react";
+import { Autocomplete, AutocompleteRenderOptionState, Box, ListItem, ListItemButton, Skeleton, TextField, Typography } from "@mui/material";
+import { FC, HTMLAttributes, SyntheticEvent, forwardRef } from "react";
 
+import { useGlobalContext } from "@/context/global-context";
 import { Listing } from "@/types/listing";
-import SearchNotFound from "./search-not-found";
-import { Virtuoso } from "react-virtuoso";
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import { useGlobalContext } from "@/context/global-context";
 import { useTranslation } from "react-i18next";
+import { Virtuoso } from "react-virtuoso";
+import SearchNotFound from "./search-not-found";
 
 const ListboxComponent = forwardRef<
     HTMLDivElement,
@@ -15,7 +15,7 @@ const ListboxComponent = forwardRef<
 >(function ListboxComponent(props, ref) {
     const { children, style, ...other } = props;
 
-    const { listings, searchQuery } = useGlobalContext();
+    const { listings, searchQuery, setSelectedListing, setAutocompleteOpen } = useGlobalContext();
     const data = listings?.filter((listing: Listing) => {
         const name = listing.name.toLowerCase();
         const symbol = listing.symbol.toLowerCase();
@@ -38,7 +38,10 @@ const ListboxComponent = forwardRef<
 
                     return (
                         <ListItem key={symbol} sx={{ backgroundColor: "transparent" }}>
-                            <ListItemButton dense>
+                            <ListItemButton dense onClick={() => {
+                                setSelectedListing(listing);
+                                setAutocompleteOpen(false);
+                            }}>
                                 {partsSymbol.map((part, index) => (
                                     <Box
                                         key={index}
@@ -74,7 +77,7 @@ const ListboxComponent = forwardRef<
 const AutocompleteStockMarket: FC = () => {
     const { t } = useTranslation();
 
-    const { searchQuery, setSearchQuery, listings, isListingsPending, isListingsError, listingsError } = useGlobalContext();
+    const { autocompleteOpen, setAutocompleteOpen, selectedListing, setSelectedListing, searchQuery, setSearchQuery, listings, isListingsPending, isListingsError, listingsError } = useGlobalContext();
 
     if (isListingsPending) return <Skeleton variant="rounded" width="100%" height={54} />;
 
@@ -87,11 +90,22 @@ const AutocompleteStockMarket: FC = () => {
             autoHighlight
             disablePortal
             disableListWrap
+            openOnFocus
+            open={autocompleteOpen}
+            onOpen={() => setAutocompleteOpen(true)}
+            onClose={() => {
+                setAutocompleteOpen(false);
+                setSelectedListing(null);
+            }}
             options={listings}
+            value={selectedListing}
             ListboxComponent={ListboxComponent}
             onInputChange={(_event: SyntheticEvent, value: string) => setSearchQuery(value)}
             noOptionsText={<SearchNotFound searchQuery={searchQuery} />}
             getOptionLabel={(option: Listing) => option.name}
+            renderOption={(props: HTMLAttributes<HTMLLIElement>, option: Listing, state: AutocompleteRenderOptionState) =>
+                [props, option, state.index] as React.ReactNode
+            }
             renderInput={(params) => (
                 <TextField
                     {...params}

@@ -2,10 +2,14 @@ import { Box, Typography } from "@mui/material";
 
 import AutocompleteStockMarket from "@/components/autocomplete-stock-market";
 import { FC } from "react";
+import StockCard from "@/components/stock-card";
+import { useGlobalContext } from "@/context/global-context";
 import { useTranslation } from "react-i18next";
 
 const IndexPage: FC = () => {
     const { t } = useTranslation();
+
+    const { selectedListing } = useGlobalContext();
 
     return (
         <Box
@@ -21,6 +25,7 @@ const IndexPage: FC = () => {
         >
             <Typography variant="h1" align="center">{t('heading')}</Typography>
             <AutocompleteStockMarket />
+            {selectedListing && <StockCard />}
         </Box>
     )
 }
