@@ -1,7 +1,7 @@
 import { Autocomplete, AutocompleteRenderOptionState, Box, ListItem, ListItemButton, Skeleton, TextField, Typography } from "@mui/material";
 import { FC, HTMLAttributes, SyntheticEvent, forwardRef } from "react";
 
-import { useGlobalContext } from "@/context/global-context";
+import { useAPIContext } from "@/context/api-context";
 import { Listing } from "@/types/listing";
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
@@ -15,7 +15,7 @@ const ListboxComponent = forwardRef<
 >(function ListboxComponent(props, ref) {
     const { children, style, ...other } = props;
 
-    const { listings, searchQuery, setSelectedListing, setAutocompleteOpen } = useGlobalContext();
+    const { listings, searchQuery, setSelectedListing, setAutocompleteOpen } = useAPIContext();
     const data = listings?.filter((listing: Listing) => {
         const name = listing.name.toLowerCase();
         const symbol = listing.symbol.toLowerCase();
@@ -77,7 +77,7 @@ const ListboxComponent = forwardRef<
 const AutocompleteStockMarket: FC = () => {
     const { t } = useTranslation();
 
-    const { autocompleteOpen, setAutocompleteOpen, selectedListing, setSelectedListing, searchQuery, setSearchQuery, listings, isListingsPending, isListingsError, listingsError } = useGlobalContext();
+    const { autocompleteOpen, setAutocompleteOpen, selectedListing, setSelectedListing, searchQuery, setSearchQuery, listings, isListingsPending, isListingsError, listingsError } = useAPIContext();
 
     if (isListingsPending) return <Skeleton variant="rounded" width="100%" height={54} />;
 

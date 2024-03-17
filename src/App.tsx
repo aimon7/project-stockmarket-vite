@@ -1,9 +1,9 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
-import { GlobalProvider } from './context/global-context';
+import { APIProvider } from './context/api-context';
+import { useColorMode } from './context/color-mode-context';
 import IndexPage from './pages';
 import { getTheme } from './theme/theme';
-import { useColorMode } from './context/color-mode-context';
 
 function App() {
   const { isDarkMode } = useColorMode();
@@ -11,10 +11,10 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalProvider>
+      <APIProvider>
         <CssBaseline />
         <IndexPage />
-      </GlobalProvider>
+      </APIProvider>
     </ThemeProvider>
   )
 }

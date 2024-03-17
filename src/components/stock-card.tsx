@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 
-import { useGlobalContext } from "@/context/global-context";
+import { useAPIContext } from "@/context/api-context";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -8,7 +8,7 @@ const StockCard: FC = () => {
     const { t } = useTranslation("translation", {
         keyPrefix: "stock_card"
     });
-    const { selectedListing } = useGlobalContext();
+    const { selectedListing } = useAPIContext();
 
     return (
         <Paper

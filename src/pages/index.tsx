@@ -1,15 +1,15 @@
 import { Box, Typography } from "@mui/material";
 
 import AutocompleteStockMarket from "@/components/autocomplete-stock-market";
-import { FC } from "react";
 import StockCard from "@/components/stock-card";
-import { useGlobalContext } from "@/context/global-context";
+import { useAPIContext } from "@/context/api-context";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 const IndexPage: FC = () => {
     const { t } = useTranslation();
 
-    const { selectedListing } = useGlobalContext();
+    const { selectedListing } = useAPIContext();
 
     return (
         <Box

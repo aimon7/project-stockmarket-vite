@@ -5,7 +5,7 @@ import mockListings from "@/mock-responses/listing-status.json";
 import { Listing } from "@/types/listing";
 import { useQuery } from "@tanstack/react-query";
 
-interface IGlobalContext {
+interface IAPIContext {
     autocompleteOpen: boolean;
     setAutocompleteOpen: (value: boolean) => void;
     searchQuery: string;
@@ -20,11 +20,11 @@ interface IGlobalContext {
     setSelectedListing: (value: Listing | null) => void;
 }
 
-export const GlobalContext = createContext<IGlobalContext>({} as IGlobalContext);
+export const APIContext = createContext<IAPIContext>({} as IAPIContext);
 
-interface IGlobalProviderProps extends PropsWithChildren { }
+interface IAPIProviderProps extends PropsWithChildren { }
 
-export const GlobalProvider: FC<IGlobalProviderProps> = ({ children }) => {
+export const APIProvider: FC<IAPIProviderProps> = ({ children }) => {
     const [autocompleteOpen, setAutocompleteOpen] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
@@ -71,7 +71,7 @@ export const GlobalProvider: FC<IGlobalProviderProps> = ({ children }) => {
     // });
 
     return (
-        <GlobalContext.Provider value={{
+        <APIContext.Provider value={{
             autocompleteOpen,
             setAutocompleteOpen,
             searchQuery,
@@ -84,11 +84,11 @@ export const GlobalProvider: FC<IGlobalProviderProps> = ({ children }) => {
             setSelectedListing
         }}>
             {children}
-        </GlobalContext.Provider>
+        </APIContext.Provider>
     );
 };
 
-export const useGlobalContext = () => {
-    return useContext(GlobalContext);
+export const useAPIContext = () => {
+    return useContext(APIContext);
 };
 
