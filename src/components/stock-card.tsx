@@ -56,12 +56,14 @@ const StockCard: FC = () => {
             <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" width={1} pt={5}>
                 <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap={1}>
                     <Typography variant="h4" sx={{ textTransform: "capitalize" }}>{t("pe")}</Typography>
+                    <Typography variant="subtitle1">{t("")}</Typography>
                 </Box>
                 <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap={1}>
                     {(isEarningsPending || isGlobalQuotePending)
                         && (!isEarningsError || !isGlobalQuoteError)
                         && <Skeleton variant="text" width="100%" />}
                     {globalQuote && earnings && <Typography variant="h4">{pe.toFixed(2)}</Typography>}
+                    {globalQuote && earnings && <Typography variant="caption">{earnings.annualEarnings[0].fiscalDateEnding}</Typography>}
                 </Box>
             </Box>
             {isOverviewPending && !isOverviewError && <Skeleton variant="text" width="100%" />}
