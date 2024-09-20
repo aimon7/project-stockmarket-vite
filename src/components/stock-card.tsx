@@ -61,7 +61,7 @@ const StockCard: FC = () => {
                     {(isEarningsPending || isGlobalQuotePending)
                         && (!isEarningsError || !isGlobalQuoteError)
                         && <Skeleton variant="text" width="100%" />}
-                    {globalQuote && earnings && <Typography variant="h4">{pe}</Typography>}
+                    {globalQuote && earnings && <Typography variant="h4">{pe.toFixed(2)}</Typography>}
                 </Box>
             </Box>
             {isOverviewPending && !isOverviewError && <Skeleton variant="text" width="100%" />}
