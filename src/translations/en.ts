@@ -16,6 +16,7 @@ export const TRANSLATIONS_EN = {
   },
   stock_card: {
     header: 'Selected stock',
-    subtitle: ' View the data for your favorite stock.'
+    subtitle: ' View the data for your favorite stock.',
+    pe: "Price to Earnings Ratio"
   }
 };
