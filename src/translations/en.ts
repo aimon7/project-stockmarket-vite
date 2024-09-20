@@ -18,6 +18,7 @@ export const TRANSLATIONS_EN = {
     header: 'Selected stock',
     subtitle: ' View the data for your favorite stock.',
     pe: "Price to Earnings Ratio",
-    fiscal_date_ending: "Fiscal Date Ending"
+    fiscal_date_ending: "Fiscal Date Ending",
+    pb: "Price to Book Ratio"
   }
 };
