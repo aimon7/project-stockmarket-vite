@@ -1,8 +1,9 @@
-import { Box, Paper, Skeleton, Typography } from "@mui/material";
+import { Paper, Skeleton, Typography } from "@mui/material";
 
 import { useAPIContext } from "@/context/api-context";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
+import StockCardSection from "./stock-card-section";
 
 const StockCard: FC = () => {
     const { t } = useTranslation("translation", {
@@ -24,7 +25,8 @@ const StockCard: FC = () => {
         earningsError
     } = useAPIContext();
 
-    const pe = globalQuote && earnings ? Number(globalQuote.price) / Number(earnings.annualEarnings[0].reportedEPS) : 0;
+    // const pe = globalQuote && earnings ? Number(globalQuote.price) / Number(earnings.annualEarnings[0].reportedEPS) : 0;
+    const pe = globalQuote && earnings ? Number(globalQuote.price) / Number(earnings.quarterlyEarnings[0].reportedEPS) : 0;
 
     return (
         <Paper
@@ -43,37 +45,31 @@ const StockCard: FC = () => {
         >
             <Typography variant="h5">{t('header')}</Typography>
             <Typography variant="subtitle2">{t('subtitle')}</Typography>
-            <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" width={1} pt={5}>
-                <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap={1}>
-                    <Typography variant="h4">{selectedListing?.symbol}</Typography>
-                    <Typography variant="subtitle1">{selectedListing?.name}</Typography>
-                </Box>
-                <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap={1}>
-                    {isOverviewPending && !isOverviewError && <Skeleton variant="text" width="100%" />}
-                    {overview && <Typography variant="h4">{overview?.Exchange}</Typography>}
-                </Box>
-            </Box>
-            <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" width={1} pt={5}>
-                <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap={1}>
-                    <Typography variant="h4" sx={{ textTransform: "capitalize" }}>{t("pe")}</Typography>
-                    <Typography variant="subtitle1">{t("fiscal_date_ending")}</Typography>
-                </Box>
-                <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap={1}>
-                    {(isEarningsPending || isGlobalQuotePending)
-                        && (!isEarningsError || !isGlobalQuoteError)
-                        && <Skeleton variant="text" width="100%" />}
-                    {globalQuote && earnings && <Typography variant="h4">{pe.toFixed(2)}</Typography>}
-                    {globalQuote && earnings && <Typography variant="caption">{earnings.annualEarnings[0].fiscalDateEnding}</Typography>}
-                </Box>
-            </Box>  <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" width={1} pt={5}>
-                <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap={1}>
-                    <Typography variant="h4" sx={{ textTransform: "capitalize" }}>{t("pb")}</Typography>
-                </Box>
-                <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap={1}>
-                {isOverviewPending && !isOverviewError && <Skeleton variant="text" width="100%" />}
-                    {globalQuote && earnings && <Typography variant="h4">{overview?.PriceToBookRatio}</Typography>}
-                </Box>
-            </Box>
+            {selectedListing && overview && (
+                <StockCardSection header={selectedListing.symbol} subtitle={selectedListing?.name} isLoading={isOverviewPending} value={overview?.Exchange} />
+            )}
+            {globalQuote && (
+                <StockCardSection header={t("price")} isLoading={isOverviewPending} value={t("dollars", { value: globalQuote.price })} />
+            )}
+            {globalQuote && earnings && (
+                <StockCardSection
+                    header={t("pe")}
+                    headerCapitalized
+                    subtitle={t("fiscal_date_ending")}
+                    isLoading={isEarningsPending || isGlobalQuotePending}
+                    value={pe.toFixed(2)}
+                    // captionValue={earnings.annualEarnings[0].fiscalDateEnding.toDateString()}
+                    captionValue={earnings.quarterlyEarnings[0].fiscalDateEnding}
+                />
+            )}
+            {overview && (
+                <StockCardSection
+                    header={t("pb")}
+                    headerCapitalized
+                    isLoading={isOverviewPending}
+                    value={overview.PriceToBookRatio}
+                />
+            )}
             {isOverviewPending && !isOverviewError && <Skeleton variant="text" width="100%" />}
             {overview && <Typography variant="body1">{overview.Description}</Typography>}
             {isOverviewError && <Typography variant="body1">{overviewError?.message}</Typography>}

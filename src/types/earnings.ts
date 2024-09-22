@@ -10,11 +10,11 @@ export type AnnualEarning = {
 };
 
 export type QuarterlyEarning = {
-    fiscalDateEnding: Date,
-    reportedDate: Date,
+    fiscalDateEnding: string,
+    reportedDate: string,
     reportedEPS: string,
     estimatedEPS: string,
     surprise: string,
     surprisePercentage: string,
-    reportTime: string	
+    reportTime: string
 }
