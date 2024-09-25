@@ -1,4 +1,4 @@
-import { PaletteMode, PaletteOptions, createTheme } from "@mui/material";
+import { PaletteMode, PaletteOptions, createTheme, responsiveFontSizes } from "@mui/material";
 
 import componetsOverrides from "./overrides";
 import { getPalette } from "./palette-config";
@@ -11,7 +11,7 @@ export const DRAWER_WIDTH: number = 240;
 export const getTheme = (selectedTheme: PaletteMode) => {
     const palette: PaletteOptions = selectedTheme === 'dark' ? getPalette('dark') : getPalette('light');
 
-    const theme = createTheme({
+    let theme = createTheme({
         palette,
         typography,
         spacing: SPACING_UNIT,
@@ -20,6 +20,8 @@ export const getTheme = (selectedTheme: PaletteMode) => {
     theme.components = {
         ...componetsOverrides(theme)
     };
+
+    theme = responsiveFontSizes(theme);
 
     return theme;
 }
