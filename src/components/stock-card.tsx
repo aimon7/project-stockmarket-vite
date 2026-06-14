@@ -25,8 +25,8 @@ const StockCard: FC = () => {
         earningsError
     } = useAPIContext();
 
-    // const pe = globalQuote && earnings ? Number(globalQuote.price) / Number(earnings.annualEarnings[0].reportedEPS) : 0;
-    const pe = globalQuote && earnings ? Number(globalQuote.price) / Number(earnings.quarterlyEarnings[0].reportedEPS) : 0;
+    const pe = globalQuote && earnings ? Number(globalQuote.price) / Number(earnings.annualEarnings[0].reportedEPS) : 0;
+    // const pe = globalQuote && earnings ? Number(globalQuote.price) / Number(earnings.quarterlyEarnings[0].reportedEPS) : 0;
 
     return (
         <Paper
@@ -58,8 +58,8 @@ const StockCard: FC = () => {
                     subtitle={t("fiscal_date_ending")}
                     isLoading={isEarningsPending || isGlobalQuotePending}
                     value={pe.toFixed(2)}
-                    // captionValue={earnings.annualEarnings[0].fiscalDateEnding.toDateString()}
-                    captionValue={earnings.quarterlyEarnings[0].fiscalDateEnding}
+                    captionValue={earnings.annualEarnings[0].fiscalDateEnding}
+                    // captionValue={earnings.quarterlyEarnings[0].fiscalDateEnding}
                 />
             )}
             {overview && (

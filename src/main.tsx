@@ -12,6 +12,7 @@ import { i18n } from './translations/i18n';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      refetchOnWindowFocus: false,
       queryFn: async ({ queryKey: [key] }) => {
         if (typeof key !== 'string') {
           throw new Error('Invalid QueryKey');
